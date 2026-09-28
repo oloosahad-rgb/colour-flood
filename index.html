@@ -147,6 +147,12 @@
         }
 
         function makeMove(targetColor) {
+                playSound(tapSound);
+    if (!musicStarted && !isMuted) {
+        bgMusic.play().catch(() => {});
+        musicStarted = true;
+    }
+
             const startColor = board[0][0];
             if (startColor === targetColor) return;
 
@@ -184,23 +190,71 @@
                 }
             }
 
-            if (allMatched) {
-                alert('Congratulations! You flooded the board! 🎉');
-                initGame();
-            } else if (moves >= maxMoves) {
-                alert('Game Over! Try again to conquer the board. 🎮');
-                initGame();
-            }
+        
+                    if (allMatched) {
+        bgMusic.pause();
+        playSound(winSound);
+        alert('Congratulations! You flooded the board!');
+        initGame();
+    } else if (moves >= maxMoves) {
+        bgMusic.pause();
+        playSound(loseSound);
+        alert('Game Over! Try again to conquer the board.');
+        initGame();
+    }
+
+                
+
+
+                
+            
         }
 
         initGame();
+   
+const bgMusic = new Audio('sounds/background.mp3');
+const tapSound = new Audio('sounds/tap.mp3');
+const winSound = new Audio('sounds/win.mp3');
+const loseSound = new Audio('sounds/lose.mp3');
+
+bgMusic.preload = 'auto';
+tapSound.preload = 'auto';
+winSound.preload = 'auto';
+loseSound.preload = 'auto';
+
+bgMusic.loop = true;
+bgMusic.volume = 0.4;
+
+let isMuted = false;
+let musicStarted = false;
+
+function playSound(audioObject) {
+    if (isMuted) return;
+    audioObject.currentTime = 0; 
+    audioObject.play().catch(() => {});
+}
+
+function toggleMute() {
+    isMuted = !isMuted;
+    if (isMuted) {
+        bgMusic.pause();
+    } else {
+        bgMusic.play().catch(() => {});
+    }
+    const muteBtn = document.getElementById('muteBtn');
+    if (muteBtn) {
+        muteBtn.textContent = isMuted ? '🔇 Unmute' : '🔊 Mute';
+    }
+}
+
     </script>
 
  
    
     
     
-   
+   <button id="muteBtn" onclick="toggleMute()">🔊 Mute</button>
+
   <script src="https://vogueaccompanimentdiscern.com/de/1b/55/de1b55e51678a0333b9b51f9fe9aee87.js"></script>
 </body>
 </html>
