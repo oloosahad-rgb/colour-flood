@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Flood Challenge</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
+        body {
+            background-color: #121214;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 100vh;
+            padding: 20px 10px;
+        }
+        .header {
+            text-align: center;
+            margin-top: 10px;
+        }
+        h1 {
+            color: #FFC107;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        .score-board {
+            font-size: 20px;
+            font-weight: bold;
+            color: #ffffff;
+        }
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(14, 1fr);
+            grid-template-rows: repeat(14, 1fr);
+            width: 90vw;
+            height: 90vw;
+            max-width: 360px;
+            max-height: 360px;
+            background-color: #1e1e24;
+            border: 8px solid #1e1e24;
+            border-radius: 16px;
+            gap: 1px;
+            overflow: hidden;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+        }
+        .cell {
+            width: 100%;
+            height: 100%;
+            transition: background-color 0.2s ease;
+        }
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            width: 100%;
+            max-width: 360px;
+            margin-bottom: 20px;
+        }
+        .color-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            outline: none;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            transition: transform 0.1s ease;
+        }
+        .color-btn:active {
+            transform: scale(0.9);
+        }
+        .ad-container {
+            font-size: 11px;
+            color: #666;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Color Flood</h1>
+        <div class="score-board">Moves: <span id="move-count">0</span>/25</div>
+    </div>
+
+    <div id="game-board"></div>
+
+    <div class="controls">
+        <button class="color-btn" style="background-color: #FF5252;" onclick="makeMove('#FF5252')"></button>
+        <button class="color-btn" style="background-color: #2196F3;" onclick="makeMove('#2196F3')"></button>
+        <button class="color-btn" style="background-color: #4CAF50;" onclick="makeMove('#4CAF50')"></button>
+        <button class="color-btn" style="background-color: #FFEB3B;" onclick="makeMove('#FFEB3B')"></button>
+        <button class="color-btn" style="background-color: #9C27B0;" onclick="makeMove('#9C27B0')"></button>
+    </div>
+
+    <div class="ad-container">Advertisement</div>
+
+    <script>
+        const BOARD_SIZE = 14;
+        const COLORS = ['#FF5252', '#2196F3', '#4CAF50', '#FFEB3B', '#9C27B0'];
+        let board = [];
+        let moves = 0;
+        const maxMoves = 25;
+
+        const boardElement = document.getElementById('game-board');
+        const moveCountElement = document.getElementById('move-count');
+
+        function initGame() {
+            moves = 0;
+            board = [];
+            boardElement.innerHTML = '';
+            moveCountElement.innerText = moves;
+
+            for (let r = 0; r < BOARD_SIZE; r++) {
+                board[r] = [];
+                for (let c = 0; c < BOARD_SIZE; c++) {
+                    const randomColor = COLORS[Math.floor(Math.random() * COLORS.length)];
+                    board[r][c] = randomColor;
+
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.id = `cell-${r}-${c}`;
+                    cell.style.backgroundColor = randomColor;
+                    boardElement.appendChild(cell);
+                }
+            }
+        }
+
+        function drawBoard() {
+            for (let r = 0; r < BOARD_SIZE; r++) {
+                for (let c = 0; c < BOARD_SIZE; c++) {
+                    document.getElementById(`cell-${r}-${c}`).style.backgroundColor = board[r][c];
+                }
+            }
+        }
+
+        function makeMove(targetColor) {
+            const startColor = board[0][0];
+            if (startColor === targetColor) return;
+
+            moves++;
+            moveCountElement.innerText = moves;
+
+            floodFill(0, 0, startColor, targetColor);
+            drawBoard();
+
+            setTimeout(checkGameStatus, 300);
+        }
+
+        function floodFill(r, c, startColor, targetColor) {
+            if (r < 0 || r >= BOARD_SIZE || c < 0 || c >= BOARD_SIZE) return;
+            if (board[r][c] !== startColor) return;
+
+            board[r][c] = targetColor;
+
+            floodFill(r + 1, c, startColor, targetColor);
+            floodFill(r - 1, c, startColor, targetColor);
+            floodFill(r, c + 1, startColor, targetColor);
+            floodFill(r, c - 1, startColor, targetColor);
+        }
+
+        function checkGameStatus() {
+            const firstColor = board[0][0];
+            let allMatched = true;
+
+            for (let r = 0; r < BOARD_SIZE; r++) {
+                for (let c = 0; c < BOARD_SIZE; c++) {
+                    if (board[r][c] !== firstColor) {
+                        allMatched = false;
+                        break;
+                    }
+                }
+            }
+
+            if (allMatched) {
+                alert('Congratulations! You flooded the board! 🎉');
+                initGame();
+            } else if (moves >= maxMoves) {
+                alert('Game Over! Try again to conquer the board. 🎮');
+                initGame();
+            }
+        }
+
+        initGame();
+    </script>
+</body>
+</html>
