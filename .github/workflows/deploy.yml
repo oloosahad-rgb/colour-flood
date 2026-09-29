@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Upload to itch.io via Butler
-        uses: josephbento/action-itch-butler@v1.1.0
+        uses: manleybrands/action-itch-butler@v1.0.3
         with:
           butler_key: ${{ secrets.ITCH_IO_API_KEY }}
           game: oloosahad/colour-flood
