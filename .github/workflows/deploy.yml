@@ -12,9 +12,10 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install and Run Butler
+      - name: Install Butler Client
         run: |
-          curl -L -o butler.zip https://itch.ovh
-          unzip butler.zip
-          chmod +x butler
-          ./butler push . oloosahad/colour-flood:html5 --key ${{ secrets.ITCH_IO_API_KEY }}
+          npm install -g butler-cli
+
+      - name: Push to Itch
+        run: |
+          butler push . oloosahad/colour-flood:html5 --key ${{ secrets.ITCH_IO_API_KEY }}
