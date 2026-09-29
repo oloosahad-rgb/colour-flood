@@ -256,38 +256,36 @@ function toggleMute() {
    <button id="muteBtn" onclick="toggleMute()">🔊 Mute</button>
 
 </script>
-    <!-- Adsterra 320x50 Mobile Banner Container -->
-<div id="adsterra-banner-container" style="text-align: center; margin: 15px auto; width: 100%; min-height: 50px;"></div>
+    
 
-<script type="text/javascript">
-    function loadAdsterraBanner() {
-        const container = document.getElementById('adsterra-banner-container');
-        if (container) {
-            container.innerHTML = ''; 
+
+
+    
+        
+        
             
-            const configScript = document.createElement('script');
-            configScript.type = 'text/javascript';
-            configScript.text = `
-                atOptions = {
-                    'key' : '4d9fbbf03a1ad076a712cf6c3d873674',
-                    'format' : 'iframe',
-                    'height' : 50,
-                    'width' : 320,
-                    'params' : {}
-                };
-            `;
-            container.appendChild(configScript);
-
-            const invokeScript = document.createElement('script');
-            invokeScript.type = 'text/javascript';
-            invokeScript.src = 'https://vogueaccompanimentdiscern.com';
-            container.appendChild(invokeScript);
-        }
-    }
-
-    window.addEventListener('DOMContentLoaded', loadAdsterraBanner);
-    setInterval(loadAdsterraBanner, 60000);
+            
+            
+        
+            
+                
+                    
+                    
+                    
+                
+                    
+                
+            
 </script>
-
+<script>
+  atOptions = {
+    'key' : '4d9fbbf03a1ad076a712cf6c3d873674',
+    'format' : 'iframe',
+    'height' : 50,
+    'width' : 320,
+    'params' : {}
+  };
+</script>
+<script src="https://vogueaccompanimentdiscern.com/4d9fbbf03a1ad076a712cf6c3d873674/invoke.js"></script>
 </body>
 </html>
