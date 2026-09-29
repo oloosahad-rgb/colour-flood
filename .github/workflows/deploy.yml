@@ -1,0 +1,21 @@
+name: Deploy to itch.io
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Upload to itch.io via Butler
+        uses: josephbento/action-itch-butler@v1.1.0
+        with:
+          butler_key: ${{ secrets.ITCH_IO_API_KEY }}
+          game: oloosahad/colour-flood
+          channel: html5
+          directory: .
