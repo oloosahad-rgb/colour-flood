@@ -12,10 +12,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Upload to itch.io via Butler
-        uses: manleybrands/action-itch-butler@v1.0.3
-        with:
-          butler_key: ${{ secrets.ITCH_IO_API_KEY }}
-          game: oloosahad/colour-flood
-          channel: html5
-          directory: .
+      - name: Install and Run Butler
+        run: |
+          curl -L -o butler.zip https://itch.ovh
+          unzip butler.zip
+          chmod +x butler
+          ./butler push . oloosahad/colour-flood:html5 --key ${{ secrets.ITCH_IO_API_KEY }}
