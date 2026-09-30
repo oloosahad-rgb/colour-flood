@@ -12,6 +12,34 @@
             padding: 0;
             user-select: none;
         }
+        #adsterra-overlay {
+            display: none; 
+            position: fixed; 
+            z-index: 9999;
+            left: 0; 
+            top: 0; 
+            width: 100%; 
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95); 
+            color: #ffffff;
+            text-align: center; 
+            font-family: sans-serif;
+            justify-content: center; 
+            align-items: center; 
+            flex-direction: column;
+        }
+        #adsterra-overlay button {
+            background: #ffcc00; 
+            color: #000000; 
+            border: none;
+            padding: 15px 45px; 
+            font-size: 22px; 
+            font-weight: bold;
+            border-radius: 5px; 
+            cursor: pointer; 
+            margin-top: 25px;
+        }
+
         body {
             background-color: #121214;
             color: #ffffff;
@@ -212,62 +240,6 @@ function checkGameStatus() {
 
 </script>
 
-/* 1. ADD THIS LIGHTBOX CSS OVERLAY */
-<style>
-    #adsterra-overlay {
-
-        #adsterra-overlay {
-            display: none; position: fixed; z-index: 9999;
-            left: 0; top: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.85); color: #fff;
-            text-align: center; font-family: sans-serif;
-            justify-content: center; align-items: center; flex-direction: column;
-        }
-        #adsterra-overlay button {
-            background: #ffcc00; color: #000; border: none;
-            padding: 15px 35px; font-size: 20px; font-weight: bold;
-            border-radius: 5px; cursor: pointer; margin-top: 20px;
-        }
-    </style>
-</head>
-<body>
-
-    <!-- 2. PASTE THIS MODAL BOX DIRECTLY INSIDE THE START OF YOUR <body> TAG -->
-    <div id="adsterra-overlay">
-        <h1 id="ad-message">Game Over</h1>
-        <p>Click below to continue tracking your score!</p>
-        <button onclick="dismissAdAndContinue()">CONTINUE</button>
-    </div>
-
-    <!-- 3. REPLACE YOUR OLD SCRIPTS WITH THIS INTERCEPTION LOGIC BEFORE </body> -->
-    <script>
-        // Paste your unique approved Smartlink string here
-        const ADSTERRA_SMARTLINK = "https://vogueaccompanimentdiscern.com/ki7gtkt9?key=33d7a845d826f57a1948013b86aa4362"; 
-
-        // Core tracking state
-        let pendingAction = null;
-
-        function triggerGameAd(headline, actionCallback) {
-            pendingAction = actionCallback;
-            document.getElementById('ad-message').innerText = headline;
-            document.getElementById('adsterra-overlay').style.display = "flex";
-        }
-
-        function dismissAdAndContinue() {
-            // Safely bypasses itch.io frame blocks via explicit user click
-            window.open(ADSTERRA_SMARTLINK, '_blank', 'noopener,noreferrer');
-            
-            // Hide the ad wall and resume game flow execution
-            document.getElementById('adsterra-overlay').style.display = "none";
-            if (typeof pendingAction === "function") {
-                pendingAction();
-                pendingAction = null;
-            }
-        }
-
-        // ==========================================
-        // 4. HOW TO INJECT INTO YOUR GAME STATES:
-        // ==========================================
 
         // EXAMPLES FOR YOUR INTEGRATION:
         /*
