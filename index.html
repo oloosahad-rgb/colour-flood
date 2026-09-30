@@ -238,7 +238,7 @@ function checkGameStatus() {
         return;
     }
 
-</script>
+
 
 
         // EXAMPLES FOR YOUR INTEGRATION:
@@ -266,6 +266,12 @@ function checkGameStatus() {
         }
         */
     </script>
+    <div id="adsterra-overlay" style="display: none;">
+        <h1 id="ad-message">Game Over</h1>
+        <p>Click below to continue tracking your score!</p>
+        <button onclick="dismissAdAndContinue()">CONTINUE</button>
+    </div>
+
 </body>
 </html>
 
