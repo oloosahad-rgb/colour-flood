@@ -176,112 +176,46 @@
             floodFill(r, c + 1, startColor, targetColor);
             floodFill(r, c - 1, startColor, targetColor);
         }
+                 
+function checkGameStatus() {
+    const firstColor = board[0][0];
+    let allMatched = true;
 
-        function checkGameStatus() {
-            const firstColor = board[0][0];
-            let allMatched = true;
-
-            for (let r = 0; r < BOARD_SIZE; r++) {
-                for (let c = 0; c < BOARD_SIZE; c++) {
-                    if (board[r][c] !== firstColor) {
-                        allMatched = false;
-                        break;
-                    }
-                }
+    for (let r = 0; r < BOARD_SIZE; r++) {
+        for (let c = 0; c < BOARD_SIZE; c++) {
+            if (board[r][c] !== firstColor) {
+                allMatched = false;
+                break;
             }
-
-        
-                    if (allMatched) {
-        bgMusic.pause();
-        playSound(winSound);
-        alert('Congratulations! You flooded the board!');
-        initGame();
-    } else if (moves >= maxMoves) {
-        bgMusic.pause();
-        playSound(loseSound);
-        alert('Game Over! Try again to conquer the board.');
-        initGame();
-    }
-
-                
-
-
-                
-            
         }
-
-        initGame();
-   
-const bgMusic = new Audio('sounds/background.wav');
-const tapSound = new Audio('sounds/tap.wav');
-const winSound = new Audio('sounds/win.wav');
-const loseSound = new Audio('sounds/lose.wav');
-
-bgMusic.preload = 'auto';
-tapSound.preload = 'auto';
-winSound.preload = 'auto';
-loseSound.preload = 'auto';
-
-bgMusic.loop = true;
-bgMusic.volume = 0.4;
-
-let isMuted = false;
-let musicStarted = false;
-
-function playSound(audioObject) {
-    if (isMuted) return;
-    audioObject.currentTime = 0; 
-    audioObject.play().catch(() => {});
-}
-
-function toggleMute() {
-    isMuted = !isMuted;
-    if (isMuted) {
-        bgMusic.pause();
-    } else {
-        bgMusic.play().catch(() => {});
     }
-    const muteBtn = document.getElementById('muteBtn');
-    if (muteBtn) {
-        muteBtn.textContent = isMuted ? '🔇 Unmute' : '🔊 Mute';
+
+    // --- ADSTERRA TRIGGER INTEGRATION ---
+
+    // 1. Check Win Condition
+    if (allMatched) {
+        triggerGameAd("Victory Achieved!", function() {
+            playSound(winSound);
+            alert("You Won!"); // Replace with your actual win screen function if you have one
+        });
+        return;
     }
-}
 
-    </script>
-
- 
-   
-    
-    
-   <button id="muteBtn" onclick="toggleMute()">🔊 Mute</button>
+    // 2. Check Fail/Loss Condition (Runs out of moves)
+    if (moves >= 25) {
+        triggerGameAd("Level Failed!", function() {
+            playSound(loseSound);
+            alert("Game Over! Try Again."); // Replace with your actual game over function if you have one
+                });
+        return;
+    }
 
 </script>
-    
 
+/* 1. ADD THIS LIGHTBOX CSS OVERLAY */
+<style>
+    #adsterra-overlay {
 
-
-    
-        
-        
-            
-            
-            
-        
-            
-                
-                    
-                    
-                    
-                
-                    
-                
-            
-</script>
-
-  
-    
-    <!-- 1. ADD THIS LIGHTBOX CSS OVERLAY BEFORE THE </head> TAG -->
-    <style>
         #adsterra-overlay {
             display: none; position: fixed; z-index: 9999;
             left: 0; top: 0; width: 100%; height: 100%;
@@ -363,5 +297,5 @@ function toggleMute() {
 </body>
 </html>
 
-</body>
-</html>
+
+
