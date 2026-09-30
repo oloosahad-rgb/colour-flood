@@ -279,10 +279,87 @@ function toggleMute() {
 </script>
 
   
-    <!-- Replace your broken ad script with this clickable ad banner link -->
-    <a href="https://vogueaccompanimentdiscern.com/ki7gtkt9?key=33d7a845d826f57a1948013b86aa4362" target="_blank" rel="noopener noreferrer">
-        <img src="YOUR_BANNER_IMAGE_URL_OR_BUTTON_HERE" alt="Play More Games" width="320" height="50" style="border:none; display:block; margin:0 auto;" />
-    </a>
+    
+    <!-- 1. ADD THIS LIGHTBOX CSS OVERLAY BEFORE THE </head> TAG -->
+    <style>
+        #adsterra-overlay {
+            display: none; position: fixed; z-index: 9999;
+            left: 0; top: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.85); color: #fff;
+            text-align: center; font-family: sans-serif;
+            justify-content: center; align-items: center; flex-direction: column;
+        }
+        #adsterra-overlay button {
+            background: #ffcc00; color: #000; border: none;
+            padding: 15px 35px; font-size: 20px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 2. PASTE THIS MODAL BOX DIRECTLY INSIDE THE START OF YOUR <body> TAG -->
+    <div id="adsterra-overlay">
+        <h1 id="ad-message">Game Over</h1>
+        <p>Click below to continue tracking your score!</p>
+        <button onclick="dismissAdAndContinue()">CONTINUE</button>
+    </div>
+
+    <!-- 3. REPLACE YOUR OLD SCRIPTS WITH THIS INTERCEPTION LOGIC BEFORE </body> -->
+    <script>
+        // Paste your unique approved Smartlink string here
+        const ADSTERRA_SMARTLINK = "https://vogueaccompanimentdiscern.com/ki7gtkt9?key=33d7a845d826f57a1948013b86aa4362"; 
+
+        // Core tracking state
+        let pendingAction = null;
+
+        function triggerGameAd(headline, actionCallback) {
+            pendingAction = actionCallback;
+            document.getElementById('ad-message').innerText = headline;
+            document.getElementById('adsterra-overlay').style.display = "flex";
+        }
+
+        function dismissAdAndContinue() {
+            // Safely bypasses itch.io frame blocks via explicit user click
+            window.open(ADSTERRA_SMARTLINK, '_blank', 'noopener,noreferrer');
+            
+            // Hide the ad wall and resume game flow execution
+            document.getElementById('adsterra-overlay').style.display = "none";
+            if (typeof pendingAction === "function") {
+                pendingAction();
+                pendingAction = null;
+            }
+        }
+
+        // ==========================================
+        // 4. HOW TO INJECT INTO YOUR GAME STATES:
+        // ==========================================
+
+        // EXAMPLES FOR YOUR INTEGRATION:
+        /*
+        function checkGameOver() {
+            if (moves >= 25 && gameNotWon) {
+                triggerGameAd("Level Failed!", function() {
+                    showFailScreen(); // Your actual game function
+                });
+            }
+        }
+
+        function checkWinCondition() {
+            if (boardIsOneColor) {
+                triggerGameAd("Victory Achieved!", function() {
+                    showWinScreen(); // Your actual game function
+                });
+            }
+        }
+
+        function userPressedStop() {
+            triggerGameAd("Game Paused", function() {
+                returnToMainMenu(); // Your actual game function
+            });
+        }
+        */
+    </script>
 </body>
 </html>
 
